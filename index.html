@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>山东交通学院头像框生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .upload-section, .preview-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .upload-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+        
+        .frame-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .frame-option {
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .frame-option:hover {
+            transform: scale(1.05);
+        }
+        
+        .frame-option.active {
+            border-color: #4cd964;
+        }
+        
+        .frame-option img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+        
+        .preview-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        #avatarPreview, #framePreview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        #framePreview {
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            background: #4cd964;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background: #3cb054;
+            transform: translateY(-2px);
+        }
+        
+        .save-btn {
+            background: #ff9500;
+        }
+        
+        .save-btn:hover {
+            background: #e08500;
+        }
+        
+        .custom-frame-upload {
+            margin-top: 20px;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .file-label {
+            display: block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-label:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 生成结果区域样式 - 确保微信可识别 */
+        .result-section {
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .result-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .result-container {
+            max-width: 300px;
+            margin: 0 auto 20px;
+            border-radius: 15px;
+            overflow: visible; /* 改为visible确保图片完整显示 */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            background: white; /* 添加白色背景确保图片完整性 */
+        }
+        
+        #resultImage {
+            width: 100%;
+            height: auto;
+            display: block;
+            /* 微信长按保存关键属性 */
+            -webkit-touch-callout: default;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            pointer-events: auto;
+            /* 确保图片是完整的图像文件 */
+            border-radius: 12px;
+        }
+        
+        .result-instruction {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .result-instruction p {
+            margin-bottom: 8px;
+        }
+        
+        .result-instruction strong {
+            color: #ffcc00;
+            font-size: 1.2rem;
+        }
+        
+        .download-btn {
+            background: #007aff;
+            margin-top: 15px;
+        }
+        
+        .download-btn:hover {
+            background: #0062cc;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .preview-container {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .result-container {
+                max-width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>山东交通学院</h1>
+            <p class="subtitle">上传头像，选择头像框，一键生成交院专属头像</p>
+        </header>
+        
+        <div class="app-container">
+            <div class="upload-section">
+                <h2 class="section-title">上传头像</h2>
+                <div class="upload-area" id="avatarUpload">
+                    <div class="upload-icon">📷</div>
+                    <p>点击或拖拽上传头像</p>
+                    <p class="subtitle">支持 JPG、PNG 格式</p>
+                </div>
+                
+                <h2 class="section-title">选择头像框</h2>
+                <div class="frame-options">
+                    <div class="frame-option active" data-frame="frame1">
+                        <img src="https://i.postimg.cc/TwsC3hfy/12.png" alt="头像框1">
+                    </div>
+                    <div class="frame-option" data-frame="frame2">
+                        <img src="https://i.postimg.cc/L5fwdjLz/13.png" alt="头像框2">
+                    </div>
+                    <div class="frame-option" data-frame="frame3">
+                        <img src="https://i.postimg.cc/rs344tPY/14.png" alt="头像框3">
+                    </div>
+                    <div class="frame-option" data-frame="frame4">
+                        <img src="https://i.postimg.cc/bNfJdtpH/21.png" alt="头像框4">
+                    </div>
+                    <div class="frame-option" data-frame="frame5">
+                        <img src="https://i.postimg.cc/1zb1Lmbm/20.png" alt="头像框5">
+                    </div>
+                    <div class="frame-option" data-frame="frame6">
+                        <img src="https://i.postimg.cc/1R2sLHhw/16.png" alt="头像框6">
+                    </div>
+                    <div class="frame-option" data-frame="frame7">
+                        <img src="https://i.postimg.cc/dVqsB0cL/17.png" alt="头像框7">
+                    </div>
+                    <div class="frame-option" data-frame="frame8">
+                        <img src="https://i.postimg.cc/Qt5DrfBw/23.png" alt="头像框8">
+                    </div>
+                    <div class="frame-option" data-frame="frame9">
+                        <img src="https://i.postimg.cc/KjSFgG5p/19.png" alt="头像框9">
+                    </div>
+                </div>
+                
+                <div class="custom-frame-upload">
+                    <h2 class="section-title">上传自定义头像框</h2>
+                    <label class="file-label">
+                        <input type="file" id="customFrameUpload" accept="image/*">
+                        选择自定义头像框
+                    </label>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h2 class="section-title">预览</h2>
+                <div class="preview-container">
+                    <img id="avatarPreview" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjxzdmcgeD0iMzUiIHk9IjM1IiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik0xMiAxNWEzIDMgMCAxIDAgMC02IDMgMyAwIDAgMCAwIDZ6Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiLz48L3N2Zz48L3N2Zz4=" alt="头像预览">
+                    <img id="framePreview" src="https://i.postimg.cc/TwsC3hfy/12.png" alt="头像框预览">
+                </div>
+                
+                <div class="controls">
+                    <button id="resetBtn">重置</button>
+                    <button id="saveBtn" class="save-btn">保存头像</button>
+                </div>
+                
+                <!-- 生成结果区域 - 直接显示在预览下方 -->
+                <div class="result-section" id="resultSection">
+                    <h2 class="result-title">您的专属头像已生成！</h2>
+                    <div class="result-container">
+                        <!-- 这里显示合成后的完整图片 -->
+                        <img id="resultImage" src="" alt="山东交通学院专属头像">
+                    </div>
+                    <div class="result-instruction">
+                        <p><strong>长按图片保存到相册</strong></p>
+                        <p>微信用户：长按图片 → 保存到手机</p>
+                        <p>其他用户：长按图片或点击下载按钮</p>
+                    </div>
+                    <button id="downloadBtn" class="download-btn">下载图片</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const avatarUpload = document.getElementById('avatarUpload');
+            const avatarPreview = document.getElementById('avatarPreview');
+            const framePreview = document.getElementById('framePreview');
+            const customFrameUpload = document.getElementById('customFrameUpload');
+            const frameOptions = document.querySelectorAll('.frame-option');
+            const resetBtn = document.getElementById('resetBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            
+            // 生成结果区域元素
+            const resultSection = document.getElementById('resultSection');
+            const resultImage = document.getElementById('resultImage');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            let currentAvatar = null;
+            let currentFrame = 'frame1';
+            let generatedImageUrl = null;
+            
+            // 上传头像
+            avatarUpload.addEventListener('click', function() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            avatarPreview.src = event.target.result;
+                            currentAvatar = event.target.result;
+                            
+                            // 隐藏之前的结果
+                            resultSection.style.display = 'none';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                };
+                input.click();
+            });
+            
+            // 拖放上传头像
+            avatarUpload.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                avatarUpload.style.background = 'rgba(255, 255, 255, 0.2)';
+            });
+            
+            avatarUpload.addEventListener('dragleave', function() {
+                avatarUpload.style.background = '';
+            });
+            
+            avatarUpload.addEventListener('drop', function(e) {
+                e.preventDefault();
+                avatarUpload.style.background = '';
+                
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        avatarPreview.src = event.target.result;
+                        currentAvatar = event.target.result;
+                        
+                        // 隐藏之前的结果
+                        resultSection.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // 选择预设头像框
+            frameOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    frameOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    currentFrame = this.getAttribute('data-frame');
+                    framePreview.src = this.querySelector('img').src;
+                    
+                    // 隐藏之前的结果
+                    resultSection.style.display = 'none';
+                });
+            });
+            
+            // 上传自定义头像框
+            customFrameUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        framePreview.src = event.target.result;
+                        
+                        // 取消所有预设头像框的选中状态
+                        frameOptions.forEach(opt => opt.classList.remove('active'));
+                        
+                        // 隐藏之前的结果
+                        resultSection.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // 重置功能
+            resetBtn.addEventListener('click', function() {
+                avatarPreview.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjxzdmcgeD0iMzUiIHk9IjM1IiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik0xMiAxNWEzIDMgMCAxIDAgMC02IDMgMyAwIDAgMCAwIDZ6Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiLz48L3N2Zz48L3N2Zz4=';
+                framePreview.src = 'https://i.postimg.cc/TwsC3hfy/12.png';
+                
+                frameOptions.forEach(opt => opt.classList.remove('active'));
+                document.querySelector('.frame-option[data-frame="frame1"]').classList.add('active');
+                
+                currentAvatar = null;
+                currentFrame = 'frame1';
+                customFrameUpload.value = '';
+                
+                // 隐藏生成结果
+                resultSection.style.display = 'none';
+            });
+            
+            // 保存功能 - 生成完整图片并显示在预览下方
+            saveBtn.addEventListener('click', function() {
+                if (!currentAvatar) {
+                    alert('请先上传头像！');
+                    return;
+                }
+                
+                // 创建画布 - 使用更高分辨率确保图片质量
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                // 提高分辨率，确保微信识别为高质量图片
+                canvas.width = 600;
+                canvas.height = 600;
+                
+                // 绘制头像
+                const avatarImg = new Image();
+                avatarImg.crossOrigin = "anonymous"; // 确保图片可被canvas处理
+                avatarImg.onload = function() {
+                    // 计算缩放和位置，使图片填满方形
+                    const scale = Math.max(600 / avatarImg.width, 600 / avatarImg.height);
+                    const x = 300 - (avatarImg.width * scale) / 2;
+                    const y = 300 - (avatarImg.height * scale) / 2;
+                    
+                    // 先绘制白色背景确保完整性
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, 600, 600);
+                    
+                    // 绘制头像
+                    ctx.drawImage(avatarImg, x, y, avatarImg.width * scale, avatarImg.height * scale);
+                    
+                    // 绘制头像框
+                    const frameImg = new Image();
+                    frameImg.crossOrigin = "anonymous";
+                    frameImg.onload = function() {
+                        // 绘制头像框（覆盖在头像上方）
+                        ctx.drawImage(frameImg, 0, 0, 600, 600);
+                        
+                        // 生成高质量PNG图片
+                        generatedImageUrl = canvas.toDataURL('image/png', 1.0);
+                        
+                        // 显示生成结果
+                        resultImage.src = generatedImageUrl;
+                        resultSection.style.display = 'block';
+                        
+                        // 自动滚动到结果区域
+                        resultSection.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start'
+                        });
+                        
+                        console.log('头像生成完成，微信可长按保存');
+                    };
+                    frameImg.onerror = function() {
+                        alert('头像框加载失败，请重试');
+                    };
+                    frameImg.src = framePreview.src;
+                };
+                avatarImg.onerror = function() {
+                    alert('头像加载失败，请重试');
+                };
+                avatarImg.src = currentAvatar;
+            });
+            
+            // 下载图片
+            downloadBtn.addEventListener('click', function() {
+                if (generatedImageUrl) {
+                    const link = document.createElement('a');
+                    link.download = '山东交通学院专属头像.png';
+                    link.href = generatedImageUrl;
+                    link.click();
+                } else {
+                    alert('请先生成头像');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
