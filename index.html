@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>山东交通学院头像框生成器</title>
+    <title>山东交通学院70周年头像框生成器</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
             color: white;
             min-height: 100vh;
             padding: 20px;
@@ -102,7 +102,7 @@
         }
         
         .frame-option.active {
-            border-color: #4cd964;
+            border-color: #ffcc00; /* 金色高亮，与红色背景搭配醒目 */
         }
         
         .frame-option img {
@@ -142,7 +142,7 @@
         }
         
         button {
-            background: #4cd964;
+            background: #e67e22; /* 橙色按钮，与红色主色调和谐 */
             color: white;
             border: none;
             padding: 12px 25px;
@@ -154,16 +154,16 @@
         }
         
         button:hover {
-            background: #3cb054;
+            background: #d35400;
             transform: translateY(-2px);
         }
         
         .save-btn {
-            background: #ff9500;
+            background: #f39c12; /* 更亮的橙色 */
         }
         
         .save-btn:hover {
-            background: #e08500;
+            background: #e67e22;
         }
         
         .custom-frame-upload {
@@ -206,10 +206,10 @@
             max-width: 300px;
             margin: 0 auto 20px;
             border-radius: 15px;
-            overflow: visible; /* 改为visible确保图片完整显示 */
+            overflow: visible; /* 确保图片完整显示 */
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             border: 3px solid rgba(255, 255, 255, 0.3);
-            background: white; /* 添加白色背景确保图片完整性 */
+            background: white; /* 白色背景确保图片完整性 */
         }
         
         #resultImage {
@@ -224,7 +224,6 @@
             -ms-user-select: none;
             user-select: none;
             pointer-events: auto;
-            /* 确保图片是完整的图像文件 */
             border-radius: 12px;
         }
         
@@ -246,12 +245,12 @@
         }
         
         .download-btn {
-            background: #007aff;
+            background: #3498db; /* 蓝色下载按钮，与红色形成对比 */
             margin-top: 15px;
         }
         
         .download-btn:hover {
-            background: #0062cc;
+            background: #2980b9;
         }
         
         @keyframes fadeIn {
@@ -275,7 +274,7 @@
     <div class="container">
         <header>
             <h1>山东交通学院</h1>
-            <p class="subtitle">上传头像，选择头像框，一键生成交院专属头像</p>
+            <p class="subtitle">上传头像，选择头像框，一键生成交院70周年专属头像</p>
         </header>
         
         <div class="app-container">
@@ -290,33 +289,42 @@
                 <h2 class="section-title">选择头像框</h2>
                 <div class="frame-options">
                     <div class="frame-option active" data-frame="frame1">
-                        <img src="https://i.postimg.cc/TwsC3hfy/12.png" alt="头像框1">
+                        <img src="https://i.postimg.cc/7PKHVBPP/1.png" alt="头像框1">
                     </div>
                     <div class="frame-option" data-frame="frame2">
-                        <img src="https://i.postimg.cc/L5fwdjLz/13.png" alt="头像框2">
+                        <img src="https://i.postimg.cc/XJ2RwzKM/2.png" alt="头像框2">
                     </div>
                     <div class="frame-option" data-frame="frame3">
-                        <img src="https://i.postimg.cc/rs344tPY/14.png" alt="头像框3">
+                        <img src="https://i.postimg.cc/qqh52MMF/3.png" alt="头像框3">
                     </div>
                     <div class="frame-option" data-frame="frame4">
-                        <img src="https://i.postimg.cc/bNfJdtpH/21.png" alt="头像框4">
+                        <img src="https://i.postimg.cc/N0Nt4FBG/4.png" alt="头像框4">
                     </div>
                     <div class="frame-option" data-frame="frame5">
-                        <img src="https://i.postimg.cc/1zb1Lmbm/20.png" alt="头像框5">
+                        <img src="https://i.postimg.cc/YCnDDWGd/6.png" alt="头像框5">
                     </div>
                     <div class="frame-option" data-frame="frame6">
-                        <img src="https://i.postimg.cc/1R2sLHhw/16.png" alt="头像框6">
+                        <img src="https://i.postimg.cc/TYQthD9x/7.png" alt="头像框6">
                     </div>
                     <div class="frame-option" data-frame="frame7">
-                        <img src="https://i.postimg.cc/dVqsB0cL/17.png" alt="头像框7">
+                        <img src="https://i.postimg.cc/VsWRHC2K/8.png" alt="头像框7">
                     </div>
                     <div class="frame-option" data-frame="frame8">
-                        <img src="https://i.postimg.cc/Qt5DrfBw/23.png" alt="头像框8">
+                        <img src="https://i.postimg.cc/3RCg6sf7/9.png" alt="头像框8">
                     </div>
                     <div class="frame-option" data-frame="frame9">
-                        <img src="https://i.postimg.cc/KjSFgG5p/19.png" alt="头像框9">
+                        <img src="https://i.postimg.cc/rpgVPgG1/10.png" alt="头像框9">
                     </div>
-                </div>
+                    <div class="frame-option" data-frame="frame10">
+                        <img src="https://i.postimg.cc/V66fQMDS/11.png" alt="头像框10">
+                    </div>
+                    <div class="frame-option" data-frame="frame11">
+                        <img src="https://i.postimg.cc/CM9q7Lxd/12.png" alt="头像框11">
+                    </div>
+                    <div class="frame-option" data-frame="frame12">
+                        <img src="https://i.postimg.cc/Hkg7GZMq/13.png" alt="头像框12">
+                    </div>
+              </div>
                 
                 <div class="custom-frame-upload">
                     <h2 class="section-title">上传自定义头像框</h2>
@@ -331,7 +339,7 @@
                 <h2 class="section-title">预览</h2>
                 <div class="preview-container">
                     <img id="avatarPreview" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjxzdmcgeD0iMzUiIHk9IjM1IiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik0xMiAxNWEzIDMgMCAxIDAgMC02IDMgMyAwIDAgMCAwIDZ6Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiLz48L3N2Zz48L3N2Zz4=" alt="头像预览">
-                    <img id="framePreview" src="https://i.postimg.cc/TwsC3hfy/12.png" alt="头像框预览">
+                    <img id="framePreview" src="https://i.postimg.cc/7PKHVBPP/1.png" alt="头像框预览">
                 </div>
                 
                 <div class="controls">
@@ -344,7 +352,7 @@
                     <h2 class="result-title">您的专属头像已生成！</h2>
                     <div class="result-container">
                         <!-- 这里显示合成后的完整图片 -->
-                        <img id="resultImage" src="" alt="山东交通学院专属头像">
+                        <img id="resultImage" src="" alt="山东交通学院70周年专属头像">
                     </div>
                     <div class="result-instruction">
                         <p><strong>长按图片保存到相册</strong></p>
@@ -461,7 +469,7 @@
             // 重置功能
             resetBtn.addEventListener('click', function() {
                 avatarPreview.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjxzdmcgeD0iMzUiIHk9IjM1IiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik0xMiAxNWEzIDMgMCAxIDAgMC02IDMgMyAwIDAgMCAwIDZ6Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiLz48L3N2Zz48L3N2Zz4=';
-                framePreview.src = 'https://i.postimg.cc/TwsC3hfy/12.png';
+                framePreview.src = 'https://i.postimg.cc/7PKHVBPP/1.png';
                 
                 frameOptions.forEach(opt => opt.classList.remove('active'));
                 document.querySelector('.frame-option[data-frame="frame1"]').classList.add('active');
@@ -541,7 +549,7 @@
             downloadBtn.addEventListener('click', function() {
                 if (generatedImageUrl) {
                     const link = document.createElement('a');
-                    link.download = '山东交通学院专属头像.png';
+                    link.download = '山东交通学院70周年专属头像.png';
                     link.href = generatedImageUrl;
                     link.click();
                 } else {
